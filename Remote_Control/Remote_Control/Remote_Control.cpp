@@ -3,7 +3,7 @@
 #include "pch.h"
 #include "framework.h"
 #include "Remote_Control.h"
-
+#include "ServerSocket.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -33,7 +33,33 @@ int main()
         }
         else
         {
-            // TODO: 在此处为应用程序的行为编写代码。
+            // TODO: socket,bind,listen,accept,read,write,close
+            //套接字初始化（linux下直接创建就行，但是windows下需要先进行套接字环境的初始化）
+            //server;
+
+            SOCKET  serv_sock = socket(PF_INET, SOCK_STREAM, 0);//TCP
+            //TODO:校验
+            sockaddr_in serv_addr,client_adr;
+            memset(&serv_addr, 0, sizeof(serv_addr));
+            serv_addr.sin_family = AF_INET;
+            serv_addr.sin_addr.s_addr = INADDR_ANY;//监听所有ip，保证所有控制端都能连上
+            serv_addr.sin_port = htons(9527);
+            
+            //bind
+            bind(serv_sock, (sockaddr*)&serv_addr, sizeof(serv_addr));
+            //TODO
+            listen(serv_sock, 1);
+            char buffer[1024];
+            int cli_size = sizeof(client_adr);
+            //SOCKET client_sock = accept(serv_sock, (sockaddr*)&client_adr, &cli_size);
+            
+            //recv(client_sock, buffer, sizeof(buffer), 0);
+            //send(client_sock, buffer, sizeof(buffer), 0);
+            closesocket(serv_sock);
+
+
+
+
         }
     }
     else
